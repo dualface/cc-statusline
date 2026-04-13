@@ -1,6 +1,6 @@
 # cc-statusline
 
-Claude Code statusline 扩展，显示模型、effort、最近 3 次任务时长和 caveman 标记。
+Claude Code statusline 扩展，以 Claude Code Plugin 形式分发。显示模型、effort、最近 3 次任务时长和 caveman 标记。
 
 ## 显示格式示例
 
@@ -18,19 +18,41 @@ Claude Code statusline 扩展，显示模型、effort、最近 3 次任务时长
 
 ## 安装
 
+### 方式 1：本地目录安装
+
 ```bash
-bash scripts/install.sh
+claude plugin install /path/to/cc-statusline --scope user
 ```
 
-安装脚本会把 `scripts/statusline-command.sh` 和 `scripts/statusline-tasks.sh` 复制到 `~/.claude/`，并用 `jq` 更新 `~/.claude/settings.json` 的 `statusLine` 字段；如果原文件已存在，会先备份为 `~/.claude/settings.json.bak-<timestamp>`。
+### 方式 2：通过 git 仓库
+
+把本仓库纳入一个 Claude Code marketplace，然后：
+
+```bash
+claude plugin install cc-statusline@<marketplace> --scope user
+```
+
+### 启用
+
+插件启用后会自动把 `statusLine` 配置写入会话 settings：
+
+```json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/statusline-command.sh",
+    "padding": 0
+  }
+}
+```
+
+无需手工编辑 `~/.claude/settings.json`。
 
 ## 卸载
 
 ```bash
-bash scripts/uninstall.sh
+claude plugin uninstall cc-statusline
 ```
-
-卸载脚本会从 `~/.claude/settings.json` 删除 `statusLine` 字段，并删除安装到 `~/.claude/` 的两个脚本副本。
 
 ## 依赖
 
@@ -39,9 +61,11 @@ bash scripts/uninstall.sh
 
 ## 文件布局
 
+- `.claude-plugin/plugin.json`：插件 manifest。
+- `settings.json`：插件级设置，注入 `statusLine` 配置。
 - `scripts/statusline-command.sh`：主 statusline 脚本。
 - `scripts/statusline-tasks.sh`：任务时长解析器。
 
 ## 自定义
 
-如果要改颜色或输出格式，直接编辑 `~/.claude/statusline-command.sh`。修改安装后的副本，不是仓库里的源文件。
+改颜色或输出格式，直接编辑仓库内 `scripts/statusline-command.sh`，下次插件加载生效。无需复制到 `~/.claude/`。

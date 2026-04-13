@@ -36,7 +36,8 @@ fi
 # Task durations from transcript
 transcript_path=$(echo "$input" | jq -r '.transcript_path // empty')
 if [ -n "$transcript_path" ] && [ -f "$transcript_path" ]; then
-  task_durations=$(bash /Users/dualface/.claude/statusline-tasks.sh "$transcript_path" 2>/dev/null)
+  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  task_durations=$(bash "${script_dir}/statusline-tasks.sh" "$transcript_path" 2>/dev/null)
   if [ -n "$task_durations" ]; then
     printf ' \033[38;5;114m%s\033[0m' "$task_durations"
   fi
