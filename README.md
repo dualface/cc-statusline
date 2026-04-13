@@ -46,19 +46,24 @@ claude plugin install cc-statusline@cc-statusline
 
 ### 启用后生效的配置
 
-插件级 `settings.json` 会把下列配置注入会话：
+插件通过 `SessionStart` 钩子 (`hooks/hooks.json`) 调用 `scripts/apply-statusline.sh`，把下列配置写入 `~/.claude/settings.json`：
 
 ```json
 {
   "statusLine": {
     "type": "command",
-    "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/statusline-command.sh",
+    "command": "bash <cache 路径>/scripts/statusline-command.sh",
     "padding": 0
   }
 }
 ```
 
-无需手工编辑 `~/.claude/settings.json`。
+注意：
+
+- 第一次装上插件后，statusLine 会在**下一个会话**开始时生效（钩子写完 settings 时，当前会话已经读过一次配置）。
+- 插件更新后，cache 路径变化，钩子会在下一个会话自动刷新 `command`。
+- 如果用户的 `settings.json` 里有自定义 `statusLine`，安装本插件会覆盖它。
+- 官方 plugin manifest 目前只支持在 `settings.json` 里放 `agent` 字段，所以只能走钩子方案。
 
 ## 卸载
 
@@ -82,7 +87,8 @@ claude plugin install cc-statusline@cc-statusline
 
 - `.claude-plugin/marketplace.json`：单插件 marketplace 目录，让仓库可被 `/plugin marketplace add` 识别。
 - `plugins/cc-statusline/.claude-plugin/plugin.json`：插件 manifest。
-- `plugins/cc-statusline/settings.json`：插件级设置，注入 `statusLine` 配置。
+- `plugins/cc-statusline/hooks/hooks.json`：`SessionStart` 钩子声明。
+- `plugins/cc-statusline/scripts/apply-statusline.sh`：把 `statusLine` 写入 `~/.claude/settings.json`。
 - `plugins/cc-statusline/scripts/statusline-command.sh`：主 statusline 脚本。
 - `plugins/cc-statusline/scripts/statusline-tasks.sh`：任务时长解析器。
 
