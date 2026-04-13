@@ -80,12 +80,12 @@ claude plugin install cc-statusline@cc-statusline
 
 ## 文件布局
 
-- `.claude-plugin/plugin.json`：插件 manifest。
 - `.claude-plugin/marketplace.json`：单插件 marketplace 目录，让仓库可被 `/plugin marketplace add` 识别。
-- `settings.json`：插件级设置，注入 `statusLine` 配置。
-- `scripts/statusline-command.sh`：主 statusline 脚本。
-- `scripts/statusline-tasks.sh`：任务时长解析器。
+- `plugins/cc-statusline/.claude-plugin/plugin.json`：插件 manifest。
+- `plugins/cc-statusline/settings.json`：插件级设置，注入 `statusLine` 配置。
+- `plugins/cc-statusline/scripts/statusline-command.sh`：主 statusline 脚本。
+- `plugins/cc-statusline/scripts/statusline-tasks.sh`：任务时长解析器。
 
 ## 自定义
 
-改颜色或输出格式，直接编辑仓库内 `scripts/statusline-command.sh`，下次插件加载生效。无需复制到 `~/.claude/`。
+改颜色或输出格式，直接编辑仓库内 `plugins/cc-statusline/scripts/statusline-command.sh`，下次插件加载生效。无需复制到 `~/.claude/`。
