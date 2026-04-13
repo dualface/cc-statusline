@@ -1,0 +1,23 @@
+{
+  "name": "cc-statusline",
+  "owner": {
+    "name": "dualface"
+  },
+  "metadata": {
+    "description": "cc-statusline 插件单仓库 marketplace"
+  },
+  "plugins": [
+    {
+      "name": "cc-statusline",
+      "source": ".",
+      "description": "Claude Code statusline 扩展，显示模型、effort、最近 3 次任务时长和 caveman 标记",
+      "version": "0.1.0",
+      "author": {
+        "name": "dualface"
+      },
+      "homepage": "https://github.com/dualface/cc-statusline",
+      "repository": "https://github.com/dualface/cc-statusline",
+      "license": "MIT"
+    }
+  ]
+}
