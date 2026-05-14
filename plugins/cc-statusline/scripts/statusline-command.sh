@@ -125,8 +125,7 @@ if [ -n "$cwd" ] && git -C "$cwd" rev-parse --git-dir >/dev/null 2>&1; then
   abs_common_dir=$(cd "$cwd" && cd "$common_dir" 2>/dev/null && pwd)
   if [ -n "$branch" ]; then
     if [ -n "$abs_git_dir" ] && [ -n "$abs_common_dir" ] && [ "$abs_git_dir" != "$abs_common_dir" ]; then
-      wt=$(basename "$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null)")
-      printf ' \033[38;5;220m[wt:%s@%s]\033[0m' "$wt" "$branch"
+      printf ' \033[38;5;220m[wt:%s]\033[0m' "$branch"
     else
       printf ' \033[38;5;108m[%s]\033[0m' "$branch"
     fi
@@ -143,9 +142,9 @@ if [ -n "$transcript_path" ] && [ -f "$transcript_path" ]; then
   fi
 fi
 
-# Caveman badge
+# Caveman badge (set CC_STATUSLINE_NO_CAVEMAN=1 to hide)
 FLAG="$HOME/.claude/.caveman-active"
-if [ -f "$FLAG" ]; then
+if [ -z "$CC_STATUSLINE_NO_CAVEMAN" ] && [ -f "$FLAG" ]; then
   MODE=$(cat "$FLAG" 2>/dev/null)
   if [ "$MODE" = "full" ] || [ -z "$MODE" ]; then
     printf ' \033[38;5;172m[CAVEMAN]\033[0m'
