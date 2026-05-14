@@ -33,6 +33,27 @@ if [ -n "$settings_effort" ]; then
   printf ' \033[38;5;183m[effort:%s]\033[0m' "$settings_effort"
 fi
 
+# Git branch / worktree indicator
+cwd=$(echo "$input" | jq -r '.workspace.current_dir // empty')
+if [ -n "$cwd" ] && git -C "$cwd" rev-parse --git-dir >/dev/null 2>&1; then
+  branch=$(git -C "$cwd" branch --show-current 2>/dev/null)
+  if [ -z "$branch" ]; then
+    branch=$(git -C "$cwd" rev-parse --short HEAD 2>/dev/null)
+  fi
+  git_dir=$(git -C "$cwd" rev-parse --git-dir 2>/dev/null)
+  common_dir=$(git -C "$cwd" rev-parse --git-common-dir 2>/dev/null)
+  abs_git_dir=$(cd "$cwd" && cd "$git_dir" 2>/dev/null && pwd)
+  abs_common_dir=$(cd "$cwd" && cd "$common_dir" 2>/dev/null && pwd)
+  if [ -n "$branch" ]; then
+    if [ -n "$abs_git_dir" ] && [ -n "$abs_common_dir" ] && [ "$abs_git_dir" != "$abs_common_dir" ]; then
+      wt=$(basename "$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null)")
+      printf ' \033[38;5;220m[wt:%s@%s]\033[0m' "$wt" "$branch"
+    else
+      printf ' \033[38;5;108m[%s]\033[0m' "$branch"
+    fi
+  fi
+fi
+
 # Task durations from transcript
 transcript_path=$(echo "$input" | jq -r '.transcript_path // empty')
 if [ -n "$transcript_path" ] && [ -f "$transcript_path" ]; then
