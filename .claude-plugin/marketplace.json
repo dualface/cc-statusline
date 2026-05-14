@@ -11,7 +11,7 @@
       "name": "cc-statusline",
       "source": "./plugins/cc-statusline",
       "description": "Claude Code statusline 扩展，显示模型、effort、最近 3 次任务时长和 caveman 标记",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": {
         "name": "dualface"
       },
